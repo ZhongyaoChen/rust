@@ -5,7 +5,6 @@
 RISC-V targets using the ratified [RVA23 Profile](https://github.com/riscv/riscv-profiles/blob/main/src/rva23-profile.adoc).
 This target will enable all mandary features of rva23u64 and rva23s64 by default.
 
-
 ## Target maintainers
 
 [@ZhongyaoChen](https://github.com/ZhongyaoChen)
@@ -17,7 +16,6 @@ This target requires:
 
 * Linux Kernel version 4.20 or later
 * glibc 2.17 or later
-
 
 ## Building the target
 
@@ -56,4 +54,3 @@ Then build target with:
 ```bash
 ./x build --target=riscv64a23-unknown-linux-gnu
 ```
-
