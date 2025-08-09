@@ -21,10 +21,9 @@ This target requires:
 
 ## Building the target
 
-The target is distributed through `rustup`, and otherwise require no
-special configuration.
+Tier-3 target is not distributed through `rustup`.
 
-If you need to build your own Rust for some reason though, the target can be build with:
+You need to build your own Rust, the target can be build with:
 
 ```bash
 ./x build --target riscv64a23-unknown-linux-gnu
@@ -32,16 +31,16 @@ If you need to build your own Rust for some reason though, the target can be bui
 
 ## Building Rust programs
 
-Add the target:
+Add the toolchain:
 
 ```bash
-rustup target add riscv64a23-unknown-linux-gnu
+rustup toolchain link rva23-toolchain {path-to-rust}/build/host/stage2
 ```
 
 Then cross compile crates with:
 
 ```bash
-cargo build --target riscv64a23-unknown-linux-gnu
+RUSTFLAGS="-C linker=riscv64-linux-gnu-gcc" cargo +rva23-toolchain build --target=riscv64a23-unknown-linux-gnu
 ```
 
 ## Cross-compilation toolchains and Testing
@@ -58,9 +57,3 @@ Then build target with:
 ./x build --target=riscv64a23-unknown-linux-gnu
 ```
 
-There are no special requirements for testing and running the targets.
-For testing cross-builds on the host, you can use the docker image. It will automatically set up a RISC-V QEMU emulator and run all the test suite.
-
-```bash
-DEPLOY=1 ./src/ci/docker/run.sh riscv64a23-gnu
-```
