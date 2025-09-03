@@ -118,5 +118,5 @@ codegen-units = 1
 
 # If you want to use a crate with local modifications, you can set a path or git dependency here.
 # For git dependencies, also add your source to ALLOWED_SOURCES in src/tools/tidy/src/extdeps.rs.
-#[patch.crates-io]
-
+[patch.crates-io]
+libffi-sys = { git = "https://github.com/ZhongyaoChen/libffi-rs", rev = "f6a601912f9b1c59868dd6654e8fdd1941fa9570" }
