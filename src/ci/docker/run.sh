@@ -98,7 +98,7 @@ if [ -f "$docker_dir/$image/Dockerfile" ]; then
 
     REGISTRY=ghcr.io
     # Default to `rust-lang` to allow reusing the cache for local builds
-    REGISTRY_USERNAME=${GITHUB_REPOSITORY_OWNER:-rust-lang}
+    REGISTRY_USERNAME=$(echo "${GITHUB_REPOSITORY_OWNER:-rust-lang}" | tr '[:upper:]' '[:lower:]')
     # Tag used to push the final Docker image, so that it can be pulled by e.g. rustup
     IMAGE_TAG=${REGISTRY}/${REGISTRY_USERNAME}/rust-ci:${cksum}
     # Tag used to cache the Docker build

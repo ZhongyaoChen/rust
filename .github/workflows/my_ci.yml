@@ -1,0 +1,78 @@
+name: Manual Command Runner
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Build image name (e.g. dist-riscv64a23-linux)'
+        required: true
+        default: 'dist-riscv64a23-linux'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI_JOB_NAME: manual
+      HEAD_SHA: ${{ github.sha }}
+      CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
+      DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      IMAGE: ${{ github.event.inputs.image }}
+
+    steps:
+      - name: Disable git crlf conversion
+        run: git config --global core.autocrlf false
+      
+      - name: Checkout the source code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - name: Free up disk space (optional)
+        run: ./src/ci/scripts/free-disk-space-linux.sh
+        continue-on-error: true
+
+      - name: Print disk usage
+        run: df -h
+
+      - name: Add extra environment variables (optional)
+        run: ./src/ci/scripts/setup-environment.sh
+
+      - name: Show the current environment
+        run: ./src/ci/scripts/dump-environment.sh
+      
+      - name: collect CPU statistics
+        run: src/ci/scripts/collect-cpu-stats.sh
+
+      - name: Install dependencies
+        run: |
+          ./src/ci/scripts/install-awscli.sh
+          ./src/ci/scripts/install-sccache.sh
+          ./src/ci/scripts/install-ninja.sh
+          ./src/ci/scripts/install-clang.sh
+          ./src/ci/scripts/install-tidy.sh
+
+      - name: Checkout submodules
+        run: ./src/ci/scripts/checkout-submodules.sh
+
+      - name: Show the environment (again)
+        run: ./src/ci/scripts/dump-environment.sh
+
+      - name: Build citool
+        run: |
+          cd src/ci/citool
+          CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=../../../build/citool cargo build
+
+      - name: Run the build
+        run: ./src/ci/scripts/run-build-from-ci.sh ${{ github.event.inputs.image }}
+
+      - name: Print disk usage (after build)
+        run: df -h
+
+      - name: Upload artifacts to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-artifacts
+          path: obj/artifacts/doc
+          if-no-files-found: ignore
+          retention-days: 5
