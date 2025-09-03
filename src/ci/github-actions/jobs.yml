@@ -241,6 +241,9 @@ auto:
   - name: dist-riscv64-linux
     <<: *job-linux-4c
 
+  - name: dist-riscv64a23-linux
+    <<: *job-linux-4c
+
   - name: dist-s390x-linux
     <<: *job-linux-4c
 
