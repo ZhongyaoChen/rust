@@ -1,7 +1,4 @@
-FROM public-docker-virtual.artnj.zte.com.cn/ubuntu:24.04 
-
-RUN sed -i 's|http://archive.ubuntu.com|http://mirrors.zte.com.cn|g' /etc/apt/sources.list.d/ubuntu.sources && \
-    sed -i 's|http://security.ubuntu.com|http://mirrors.zte.com.cn|g' /etc/apt/sources.list.d/ubuntu.sources
+FROM ubuntu:24.04 
 
 COPY scripts/cross-apt-packages.sh /scripts/
 RUN sh /scripts/cross-apt-packages.sh

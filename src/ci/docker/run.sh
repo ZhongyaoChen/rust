@@ -113,11 +113,6 @@ if [ -f "$docker_dir/$image/Dockerfile" ]; then
         "-f" "$dockerfile"
         "$context"
     )
-    build_args+=("--network=host")
-    build_args+=("--build-arg" "http_proxy=http://127.0.0.1:3128")
-    build_args+=("--build-arg" "https_proxy=http://127.0.0.1:3128")
-    build_args+=("--build-arg" "no_proxy=.zte.com.cn,localhost,127.0.0.1")
-
 
     GHCR_BUILDKIT_IMAGE="ghcr.io/rust-lang/buildkit:buildx-stable-1"
     # On non-CI jobs, we try to download a pre-built image from the rust-lang-ci
@@ -353,10 +348,6 @@ docker \
   --env SRC=/checkout \
   $extra_env \
   $args \
-  --network=host \
-  --env http_proxy=http://127.0.0.1:3128 \
-  --env https_proxy=http://127.0.0.1:3128 \
-  --env no_proxy=.zte.com.cn \
   --env CARGO_HOME=/cargo \
   --env DEPLOY \
   --env DEPLOY_ALT \
