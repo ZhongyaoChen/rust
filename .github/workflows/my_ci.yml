@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 360
     env:
       CI_JOB_NAME: manual
       HEAD_SHA: ${{ github.sha }}
