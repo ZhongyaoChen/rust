@@ -167,7 +167,7 @@ else
     # Test the Cranelift backend in CI. Bootstrap knows which targets to run tests on.
     CODEGEN_BACKENDS="${CODEGEN_BACKENDS:-llvm,cranelift}"
   fi
-  RUST_CONFIGURE_ARGS="$RUST_CONFIGURE_ARGS --set rust.codegen-backends=$CODEGEN_BACKENDS"
+  # RUST_CONFIGURE_ARGS="$RUST_CONFIGURE_ARGS --set rust.codegen-backends=$CODEGEN_BACKENDS"
 
   # We enable this for non-dist builders, since those aren't trying to produce
   # fresh binaries. We currently don't entirely support distributing a fresh
@@ -177,15 +177,16 @@ else
   # true for all builds. In practice it's probably a good idea to keep building
   # LLVM continuously on at least some builders to ensure it works, though.
   # (And PGO is its own can of worms).
-  if [ "$NO_DOWNLOAD_CI_LLVM" = "" ]; then
-    RUST_CONFIGURE_ARGS="$RUST_CONFIGURE_ARGS --set llvm.download-ci-llvm=if-unchanged"
-  else
+  #if [ "$NO_DOWNLOAD_CI_LLVM" = "" ]; then
+  #  RUST_CONFIGURE_ARGS="$RUST_CONFIGURE_ARGS --set llvm.download-ci-llvm=if-unchanged"
+    RUST_CONFIGURE_ARGS="$RUST_CONFIGURE_ARGS --set llvm.download-ci-llvm=false"
+  #else
     # CI rustc requires CI LLVM to be enabled (see https://github.com/rust-lang/rust/issues/123586).
     NO_DOWNLOAD_CI_RUSTC=1
     # When building for CI we want to use the static C++ Standard library
     # included with LLVM, since a dynamic libstdcpp may not be available.
     RUST_CONFIGURE_ARGS="$RUST_CONFIGURE_ARGS --set llvm.static-libstdcpp"
-  fi
+  #fi
 
   # Download GCC from CI on test builders
   RUST_CONFIGURE_ARGS="$RUST_CONFIGURE_ARGS --set gcc.download-ci-gcc=true"
