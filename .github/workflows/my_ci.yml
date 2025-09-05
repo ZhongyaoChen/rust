@@ -41,9 +41,6 @@ jobs:
       - name: Show the current environment
         run: ./src/ci/scripts/dump-environment.sh
       
-      - name: collect CPU statistics
-        run: src/ci/scripts/collect-cpu-stats.sh
-
       - name: Install dependencies
         run: |
           ./src/ci/scripts/install-awscli.sh
@@ -73,6 +70,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: manual-artifacts
-          path: obj/artifacts/doc
+          path: obj/build/dist
           if-no-files-found: ignore
           retention-days: 5
